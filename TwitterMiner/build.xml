@@ -1,68 +1,207 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="run" name="InfoRetTwitterMood">
-	<property environment="env" />
-	<property name="debuglevel" value="source,lines,vars" />
-	<property name="target" value="1.6" />
-	<property name="source" value="1.6" />
-	<path id="InfoRetTwitterMood.classpath">
-		<pathelement location="bin" />
-		<pathelement location="lib/twitter4j-async-3.0.1.jar" />
-		<pathelement location="lib/twitter4j-core-3.0.1.jar" />
-		<pathelement location="lib/twitter4j-examples-3.0.1.jar" />
-		<pathelement location="lib/twitter4j-media-support-3.0.1.jar" />
-		<pathelement location="lib/twitter4j-stream-3.0.1.jar" />
-        <pathelement location="lib/mongo-2.10.0.jar"/>
-	</path>
-	<target name="init">
-		<mkdir dir="bin" />
-		<copy includeemptydirs="false" todir="bin">
-			<fileset dir="src">
-				<exclude name="**/*.launch" />
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-	</target>
-	<target name="clean">
-		<delete dir="bin" />
-	</target>
-	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project" name="build" />
-	<target name="build-subprojects" />
-	<target depends="init" name="build-project">
-		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-			<src path="src" />
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</javac>
-	</target>
-	<target name="run" depends="build">
-		<java classname="at.ac.uibk.inforet.twittermood.CrawlerController" failonerror="true" fork="yes">
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</java>
-	</target>
-
-	<target name="parse" depends="build">
-		<java classname="at.ac.uibk.inforet.twittermood.ParserController" failonerror="true" fork="yes">
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</java>
-	</target>
-	
-	<target name="mr" depends="build">
-		<java classname="at.ac.uibk.inforet.twittermood.MapReduceController" failonerror="true" fork="yes">
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</java>
-	</target>
-	
-	<target name="arff" depends="build">
-		<java classname="at.ac.uibk.inforet.twittermood.ARFFExportController" failonerror="true" fork="yes">
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</java>
-	</target>
-	
-
-	<target name="happy" depends="build">
-		<java classname="at.ac.uibk.inforet.twittermood.HappyWorldController" failonerror="true" fork="yes">
-			<classpath refid="InfoRetTwitterMood.classpath" />
-		</java>
-	</target>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="inforettwittermood" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="128m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  
+  <!-- Global Libraries -->
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module TwitterMiner -->
+  
+  <dirname property="module.twitterminer.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.twitterminer" value="${compiler.args}"/>
+  
+  <property name="twitterminer.output.dir" value="${module.twitterminer.basedir}/bin"/>
+  <property name="twitterminer.testoutput.dir" value="${module.twitterminer.basedir}/bin"/>
+  
+  <path id="twitterminer.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="twitterminer.module.production.classpath">
+    <pathelement location="${basedir}/lib/twitter4j-async-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-core-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-examples-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-media-support-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-stream-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/mongo-2.10.0.jar"/>
+  </path>
+  
+  <path id="twitterminer.runtime.production.module.classpath">
+    <pathelement location="${twitterminer.output.dir}"/>
+    <pathelement location="${basedir}/lib/twitter4j-async-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-core-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-examples-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-media-support-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-stream-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/mongo-2.10.0.jar"/>
+  </path>
+  
+  <path id="twitterminer.module.classpath">
+    <pathelement location="${twitterminer.output.dir}"/>
+    <pathelement location="${basedir}/lib/twitter4j-async-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-core-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-examples-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-media-support-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-stream-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/mongo-2.10.0.jar"/>
+  </path>
+  
+  <path id="twitterminer.runtime.module.classpath">
+    <pathelement location="${twitterminer.output.dir}"/>
+    <pathelement location="${basedir}/lib/twitter4j-async-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-core-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-examples-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-media-support-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/twitter4j-stream-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/mongo-2.10.0.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.twitterminer">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.twitterminer">
+    <patternset refid="excluded.from.module.twitterminer"/>
+  </patternset>
+  
+  <path id="twitterminer.module.sourcepath">
+    <dirset dir="${module.twitterminer.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.twitterminer" depends="compile.module.twitterminer.production,compile.module.twitterminer.tests" description="Compile module TwitterMiner"/>
+  
+  <target name="compile.module.twitterminer.production" description="Compile module TwitterMiner; production classes">
+    <mkdir dir="${twitterminer.output.dir}"/>
+    <javac destdir="${twitterminer.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.twitterminer}"/>
+      <bootclasspath refid="twitterminer.module.bootclasspath"/>
+      <classpath refid="twitterminer.module.production.classpath"/>
+      <src refid="twitterminer.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.twitterminer"/>
+    </javac>
+    
+    <copy todir="${twitterminer.output.dir}">
+      <fileset dir="${module.twitterminer.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.twitterminer.tests" depends="compile.module.twitterminer.production" description="compile module TwitterMiner; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.twitterminer" description="cleanup module">
+    <delete dir="${twitterminer.output.dir}"/>
+    <delete dir="${twitterminer.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.twitterminer" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.twitterminer" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.twitterminer:jar" value="${basedir}/classes/artifacts/TwitterMiner_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.TwitterMiner.jar" value="${artifacts.temp.dir}/TwitterMiner.jar"/>
+  </target>
+  
+  <target name="artifact.twitterminer:jar" depends="init.artifacts, compile.module.twitterminer" description="Build &#39;TwitterMiner:jar&#39; artifact">
+    <property name="artifact.temp.output.twitterminer:jar" value="${artifacts.temp.dir}/TwitterMiner_jar"/>
+    <mkdir dir="${artifact.temp.output.twitterminer:jar}"/>
+    <jar destfile="${temp.jar.path.TwitterMiner.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${twitterminer.output.dir}"/>
+      <zipfileset src="${basedir}/lib/mongo-2.10.0.jar"/>
+      <zipfileset src="${basedir}/lib/twitter4j-examples-3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/twitter4j-media-support-3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/twitter4j-core-3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/twitter4j-async-3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/twitter4j-stream-3.0.1.jar"/>
+      <zipfileset file="${basedir}/token.ser"/>
+      <zipfileset dir="${basedir}/resources"/>
+    </jar>
+    <copy file="${temp.jar.path.TwitterMiner.jar}" tofile="${artifact.temp.output.twitterminer:jar}/TwitterMiner.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.twitterminer:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.twitterminer:jar}"/>
+    <copy todir="${artifact.output.twitterminer:jar}">
+      <fileset dir="${artifact.temp.output.twitterminer:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>
