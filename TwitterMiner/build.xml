@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="run" name="InfoRetTwitterMood">
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<path id="InfoRetTwitterMood.classpath">
+		<pathelement location="bin" />
+		<pathelement location="lib/twitter4j-async-3.0.1.jar" />
+		<pathelement location="lib/twitter4j-core-3.0.1.jar" />
+		<pathelement location="lib/twitter4j-examples-3.0.1.jar" />
+		<pathelement location="lib/twitter4j-media-support-3.0.1.jar" />
+		<pathelement location="lib/twitter4j-stream-3.0.1.jar" />
+        <pathelement location="lib/mongo-2.10.0.jar"/>
+	</path>
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</javac>
+	</target>
+	<target name="run" depends="build">
+		<java classname="at.ac.uibk.inforet.twittermood.CrawlerController" failonerror="true" fork="yes">
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</java>
+	</target>
+
+	<target name="parse" depends="build">
+		<java classname="at.ac.uibk.inforet.twittermood.ParserController" failonerror="true" fork="yes">
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</java>
+	</target>
+	
+	<target name="mr" depends="build">
+		<java classname="at.ac.uibk.inforet.twittermood.MapReduceController" failonerror="true" fork="yes">
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</java>
+	</target>
+	
+	<target name="arff" depends="build">
+		<java classname="at.ac.uibk.inforet.twittermood.ARFFExportController" failonerror="true" fork="yes">
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</java>
+	</target>
+	
+
+	<target name="happy" depends="build">
+		<java classname="at.ac.uibk.inforet.twittermood.HappyWorldController" failonerror="true" fork="yes">
+			<classpath refid="InfoRetTwitterMood.classpath" />
+		</java>
+	</target>
+</project>
