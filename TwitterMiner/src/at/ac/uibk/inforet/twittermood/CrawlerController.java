@@ -1,5 +1,7 @@
 package at.ac.uibk.inforet.twittermood;
 
+import java.util.Scanner;
+
 public class CrawlerController {
 
 	public static void main(String args[]) throws Exception {
@@ -13,12 +15,18 @@ public class CrawlerController {
 
 		if (TokenSerializable.getInstance().tokenExists()) {
 			System.out.println("Found token file - trying to load...");
-			// Scanner s= new Scanner(System.in);
-			// System.out.println("Insert useId:");
-			// int useId = s.nextInt();
 
-			// TODO figure out what this use id is about....
-			te.loadTokens(1);
+            if(args.length>0){
+                System.out.println("Enter search keyword!");
+                Scanner s= new Scanner(System.in);
+                String searchKeyword = s.next();
+                System.out.println("Crawl only tweets containing \"" + searchKeyword + "\"") ;
+                TweetBucketController.getInstance().setKeyword(searchKeyword);
+            }
+
+            // IMPORTANT - even though no idea what it does. removal leads to auth. failure!!!
+            te.loadTokens(1);
+
 		} else {
 			System.out.println("Didnt found any token file...");
 			te.recieveTokens(args);
