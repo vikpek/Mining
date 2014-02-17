@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/InfoRetTwitterMood.iml" filepath="$PROJECT_DIR$/InfoRetTwitterMood.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TwitterMiner.iml" filepath="$PROJECT_DIR$/TwitterMiner.iml" />
     </modules>
   </component>
 </project>
